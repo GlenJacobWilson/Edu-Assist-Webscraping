@@ -15,13 +15,12 @@ app.add_middleware(
 def get_notifications():
     return get_ktu_announcements()
 
-# Note: The file_id contains special characters like '=' and '+'
-# FastAPI might decode them incorrectly if we just use {file_id}.
-# But for now, let's try the direct path.
-@app.get("/download/{file_id}")
+# --- THE FIX IS HERE ---
+# We removed "{file_id}" from the path. 
+# FastAPI will now look for it as a query parameter automatically.
+@app.get("/download")
 def download_file(file_id: str):
-    # Important: In URLs, '+' might become a space. We might need to handle that if it fails.
-    # But first, let's try the direct pass.
+    print(f"Attempting to download ID: {file_id}") # Debug print
     
     file_content, content_type = download_ktu_file(file_id)
     
@@ -29,7 +28,8 @@ def download_file(file_id: str):
         return Response(
             content=file_content, 
             media_type=content_type or "application/pdf",
-            headers={"Content-Disposition": f"attachment; filename=ktu_document.pdf"}
+            # We set a generic filename, or you could pass the name from frontend too
+            headers={"Content-Disposition": "attachment; filename=ktu_document.pdf"}
         )
     else:
-        return {"error": "Could not download file. Check Token expiration."}
+        return {"error": "Could not download file. Token might be expired or ID is invalid."}

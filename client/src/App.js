@@ -57,7 +57,7 @@ function App() {
                     {item.files.map((file, index) => (
                       <a 
                         key={index}
-                        href={`http://127.0.0.1:8000/download/${encodeURIComponent(file.id)}`}
+                        href={`http://127.0.0.1:8000/download?file_id=${encodeURIComponent(file.id)}`}
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="download-btn"
