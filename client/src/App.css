@@ -69,3 +69,110 @@ body { background-color: #f4f7f6; font-family: 'Segoe UI', sans-serif; color: #3
 
 /* Loading State */
 .loading { text-align: center; padding: 50px; font-size: 1.2rem; color: #888; }
+
+/* Dashboard Header */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); /* Deep Blue */
+  color: white;
+  padding: 30px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.welcome-section h1 { font-size: 1.8rem; margin: 0; }
+.subtitle { opacity: 0.8; margin-top: 5px; }
+
+/* Countdown Widget */
+.countdown-card {
+  background: rgba(255,255,255,0.2);
+  padding: 15px 25px;
+  border-radius: 10px;
+  text-align: center;
+  backdrop-filter: blur(5px);
+}
+.count-number { display: block; font-size: 2.2rem; font-weight: bold; }
+.count-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+
+/* Pinned Card Styling */
+.pinned-card {
+  border-left: 5px solid #f1c40f !important; /* Gold Border */
+  background-color: #fffdf0; /* Very light yellow bg */
+}
+
+/* Star Button */
+.star-btn {
+  background: none;
+  border: 1px solid #ddd;
+  padding: 4px 10px;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+}
+.star-btn:hover { background: #eee; }
+.logout-btn { background: rgba(0,0,0,0.3); color: white; border:none; padding: 10px 20px; border-radius: 5px; cursor: pointer;}
+
+/* Better Header Layout */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  margin-bottom: 30px;
+}
+
+/* Fix the Button Group */
+.header-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+/* Sexy GPA Button */
+.gpa-btn {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 10px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none; /* In case it's a link */
+}
+
+.gpa-btn:hover {
+  background-color: white;
+  color: #1e3c72;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Sexy Logout Button */
+.logout-btn {
+  background-color: #ff4757;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #ff6b81;
+  transform: translateY(-2px);
+}

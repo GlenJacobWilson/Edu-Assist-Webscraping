@@ -2,17 +2,30 @@ import requests
 import urllib3
 import json
 import base64
+from bs4 import BeautifulSoup 
+
+# --- AI IMPORTS ---
+from sumy.parsers.plaintext import PlaintextParser
+from sumy.nlp.tokenizers import Tokenizer
+from sumy.summarizers.text_rank import TextRankSummarizer
+import nltk
+
+# Download necessary NLTK data (Run once automatically)
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt')
+    nltk.download('punkt_tab')
 
 # 1. Disable SSL warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # 2. Create a Persistent Session
-# This makes Python act like a real browser that "remembers" cookies
 session = requests.Session()
 
 # 3. CONFIGURE HEADERS & TOKEN
-# Paste your fresh token below.
-CURRENT_TOKEN = 'lXP4Yb2mcu0cAFcWeA7OeQrI0NN8SWYcQrBGsv1ETO83m7Sn7wQih73MMiC-6GiL5YUVgQMoQWXuOc0CNynburz-h5W6KsWyHL8KOYmKgnc-JOTQTX5_B9Mqq0muf56q_df8N0CkPueVUtJ6dI_eaZLb0LiD7wbqp28WCeLK7ANNO36iwN3xA2-g5Ww9MjOea-RVsiZ1HtcSFzO6OEDg_P-lHKikAQ88a7EKayPo6zKGw_Ai1c4bzSmFtRHcvhDU5kruH5gpH65nT8yaO9bArlBASMGjmcOtcsMQYhsUsTL4CoDj44E8OVoH2M2DWxYk3veC-gZVqWMznVm_Orrf-hvfv7Xd2AQSRTf9LVKf5vpKjXRtAVmq00qBOF9B1buNtDMJGtHf9GN48GjaD0zv75x8X9X_SqK5HMAL2lpvam-U63iZiGMsuHwaJIJR_IP_2WTmExQD7ZIZTwFFmjxz3v3EwL9B9bnSpQzhczpgrX-rRx0Yo2woVhoMo2jc_cyeu6HOtHHojdUrAeSRXiavj7R45IfF8qz1kcGvK1HrYgdwXpDQXqOo25qjD6Z6M7axEIX4W7jRj7KoRYkw7chB4aXWMxrW_Alpk6rRlBIl7WMPJzpYRdydgUX4ihi16LF2-3-BzJ4yzLp8HygeSfJSSCQL2vuqV1ux5QpoUkXF3Ij9m1Oyvo-nzDn0cVXYNQXF7AST8xjnZbIvQw787nTavFkdEgEoxhvMd8RJfi-v6I1FojC6mNHgHpxJ3GEaGj_SK1__dIsYqCE0dEpoNqCaVPrimRIolfTyXP10j5U3XVG1DBWtifhCEawo-5DYMbT7sYNxF6HHX1kCA8ivdzclviEp-cQMur6WSwCJVJRRXrEE3giOCUQKln7DcvTRrUvgfukySaOTdIyuiHjk-q-z661Y4YB95lNKYciNPv6KHyG5ochGifk0tfjJSXXjLWk8bcIM5a4tRmpdIwlrN-89dI2BslHJOsdw9nn3R-aoFPGzslm1GxJXNWxjM5LcJ13qeAl_nmsMJQNL9dZJ--oHlYhY6vhxBO_R5-lFaVrhFjJyPoVo6KUNCZRLEkMzQcPTBvfmUltGofhjdyLjNqcwBZ_f8UZEx-blVDfJLFqnzXZ-4Gf7ztYYCFJBhPh7hseOiZ26AM15nj9IEeyzGp7gDPj6fWDsjPxhyKpBGCRtwiuwLk_c3x-EvCQNy9HEgAlgRXUDLT1sHPZe50es1zGBl_R_0rg0DQWcdKcdfJ4hJNk_GhVydJdf5jubCdaI3fycmEdlGC0RYX6VTon1HpLjnrqU5o7-1uekjgs51a6Aw7E01a6v2aWWdtQEAZd9UvsKrT15L1mxwy06USEY9lJFbMFmg49GEGJ-zIecvjeilpqQuTdXoEwpXFWcbNtCtph9qvoX1Tpm4zIvuj6GYZ9ryT9Mx0xpndlzBbY1cCptEhUN6z1olOSk0l2Hz7ZQp1TwXVa4_WpOIcZA-xPbKjQMQCznhzXG0FIWCgkNLZVp2ajx5Wuiz17Js6I9-WyLA9UjUoGk_LXxwKNKqf5H_SqydUp9-syOYCUBcQ4KEmfVPgiCPwneB3seZOqDKjJnnA3zfExUyzftruPadfeZ6GahDHSKy3S0i4PntN5X6NW3z5gOn4mauQjm_AJMgDW_n6wlB2ekTR3eVvmYn-m-PIbAQfreU4c9Ej_f0s5caYOKOPyKemvop6PgdVx_E4rdVhSh-Sgu3JP3kyhoamt9p8_LkdV9lCvEi35159QXTDZBlEAkbyo4OTf66dcXctG--cK4JWgCrUUyR9ksXtaYL6zNGpUt2xbjuYBjctc3eiNF56JxZTtHEbUYiuADMSaj6cmkGUUl3ZDIJP18v-O8Ocdl0OHfEs0qj6clJwVCB_vuZ_cVRondZuxUdGqexzbTiUH9AoXVDQodcnaMFBdSmvHYDUQyh_VqCamiyoifqX7Ge93G6roWqcKigIy3-DAKUrqc1U07rkUKkOjVj7L-d8e79n-_NgEircGCCKGNd3BxOUWf2XdpdkWbnSfsxYorJoEoV0C77Yehp6nHRF-FZNofGH3u7n-rbZuJyuryuSD-70frOgQMuQ494sO1J++6LfKyPAqAAAAAGBsUvD6QfSnqOyFFuzzVxT3s9dx'
+# ⚠️ IMPORTANT: Replace this with your NEW x-Token from the browser ⚠️
+CURRENT_TOKEN = 'cq3Cmtn0K/0cAFcWeA7RRZf8TW749NaCmYtVZMNSbcUnaM9neEYwUq_Y2aGgN3Vn-Vv_16PS5-tmOgcFjNrLO5mFzlJ6Ji7JTaQlBn_LrGxQXkm0XjVPPsgxnpcnTimi3u4GVUKB4OtX6rbOHNm8SMcL2_6eJOfLFjvi9q6xzQEdPMimLcmUqqq_NMtPtTg8Hc3-q_5yOa2ZuK55BNALXXonkK6k0Erm_9K0mWcEtzltr8K5U93axzuTpsFpRFe1e_Kvo7DCFo3y3qKsGm1aGMcvnTLonKRZQZPU2MIMzKYKI4hzC_u8M_BZoyxiJjqmtAtBTy6mCUyLV4k2cBzZZEvVn2_p9yOhJI8DE_dfoT8-Gz8iuuv9Ih-q5TgGoanrMhoS_kt9LtJlVN4vAEJm2cgetTAvD0v5SIhlz_VDtyGJ2-eOmM0q8XRDVxo9MXRgToMJKoapdk8AJ5_8-WNmnj9iaoRfdI-V2h0Qoj0lOYZjyONnyt5XHcnWo-rcJxlia2K4ro06czOiM1tne5ukayNWf1V92wXAQMxoOzEWizQ5anjepT-MGCVdEJ-L3ih_6qgqdNz663DKwWfqo3Bc_8P3cDvU2t7S0b-kxwJMwTGA5yo4eoPL5CUAUokIzgthj1-ZvtfJ_7sJkSvnOurz4KpC7txeEZlH4EFAQvC8_jfDHCFqym35JWsJKM1PU5vmDNFP-0DpZ7sqTDMuIFEbGlbnb-RvXFUKWqO3Y7dvyPGt3awhICJZi-fsGHkKZLkHZ_9GffRFlgFGTiTXs5m1E8ZcmVJ7AsG2WKI5evsveCHpgvyObtrC08vDP3IFNN8AdIHP8G2BcHp_zU0-BjW2wU04JItzYCNYr1lACrnBaNBgKnquv1wvVOVtsRjbn1cmvoZjlcNzq_S0TU3EQHaMIGf9L8KpePLw1JUeTpAs3P-Csf7ST_p3eGWzJD-LJM4mH0Pyn01Ee86-DamPblr3n8qpovitgf8TZxHb5n0DQxFsFDxhAzQdzJmpzfZMApj9jNNLoIzJjVJzjumBzEnDMLOEU1-mTDYYms1hvexpdos04Bx3hmfMDLCH4HxnlohUQ3bvT317A6JGtOCIVbCxnXVWqoIiyvcwm7knDXwOC2-CvQTkIs8Oqy8deltmA6BYSJnr3hjmkBTyAbK6m6m5SloppMTusorMf7zDW_pcgKE7bZgMxUNbTRTwY35alOwirYbj1p3o7SJwqSUj3HFQFxPm_vc7b-CbFJgGNVz0PIg8ctZN3s7rpwogU86yfCztB9wNEctUpQYdvArhAe6Rt3xTYK51w1kHvzlTsZpzjRotYkpTdHwYRnlxcwPg4xkMYGp26Fuw583ItKBgLCZ6A3Rv8YKmkgiXl3AdgUNbjCZUzv32RugjJMzSWGjh5cLMe2qfAL4KVy22z4BXiRfFAtlW1f7M8Zr2m0BS1dNQ0vp4yCsb0R2TXs6dn8PVDL-twT5fBoUhyqAH6wD9vQ0tJF7F4mt2ZUzUpUhWnJyS8rIuPnhL7WPCfw6i1vYF0W819TNFhKoZAl6YsB_UCgC1Sr_TS0qApmbvnTe5x4JFb-NoSLVjBxL1P9M8o2EhRSNqROsFNP0OKgDYrwVd31DIOJI_b16kyjF6A5hmEcX790Mv7Q9i7D3vgxMHMfGXgX9x3vIe-R1vuj7RswWox0WPHzYK5is7a9EKb5ArDu3YMmkMPjBXOyHOR43DCyijnQiauxCjzbrG7wbOU4ndA2Aid8hYL2jF53WcBSrvZZSiUC-X99ik3xzyVK3lD0qBb9E4ps71eBksjUKC96fga84fBdYCi60Lstxcfc-pUPDBDacxmNVGurs0pU38e3PJJ2vnGOJKAcjTU4q19koSd76MudRYzaKZjci9nH_pHtbsaPwL3aUicMm65OV6XHBrxJUbYTSOGZpt40Yz5N26ZkAkSk2XrB5Jl1ISl8bvxLUEfiBCEbCP5qU3DB4aIMVrb9aT7_qlos2RMm_tb8bwSmxw7mi_hDDlV1A2JmoIeu8RN4uS81aw2rM-VyvRCHPVQbYD9BMGRyBC7_-ThDY8mk21PLXILz0CmM5dyxqSzEdAxoYz8yC4rx0GInIjxzmnH_Xjd0MrMqgM3CS3hsJ67M5hrL6I8BDULlPt8WDqf58NG6lKe-rQXLTFPpT48d70W4WJQrJYB5+ldzDhzl++6LfKyPAqAAAAAGBsUvD6QfSnqOyFFuzzVxT3s9dx' 
 
 session.headers.update({
     'Accept': 'application/json, text/plain, */*',
@@ -22,6 +35,30 @@ session.headers.update({
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
     'x-Token': CURRENT_TOKEN
 })
+
+# --- AI SUMMARY FUNCTION ---
+def generate_summary(html_content, title):
+    # 1. Clean HTML to Text
+    soup = BeautifulSoup(html_content or "", 'html.parser') 
+    text = soup.get_text(" ", strip=True) 
+    
+    # 2. INTELLIGENT FALLBACK
+    # If the message is basically empty (just "Refer attachment" or nothing),
+    # use the Title as the summary context.
+    if len(text) < 50: 
+        return f"📌 {title}" # Just return the title with an icon
+
+    # 3. Run TextRank AI on longer text
+    try:
+        parser = PlaintextParser.from_string(text, Tokenizer("english"))
+        summarizer = TextRankSummarizer()
+        summary = summarizer(parser.document, 1) 
+        
+        if summary:
+            return str(summary[0])
+        return text[:100] + "..."
+    except Exception as e:
+        return text[:100] + "..."
 
 def get_ktu_announcements():
     url = 'https://api.ktu.edu.in/ktu-web-portal-api/anon/announcemnts'
@@ -49,12 +86,20 @@ def get_ktu_announcements():
                         "id": attachment.get('encryptId')
                     })
 
+                # --- GENERATE AI SUMMARY ---
+                original_msg = item.get('message', '')
+                title = item.get('subject', '') # Get title
+                
+                # FIX: Pass BOTH message and title to the function
+                ai_summary = generate_summary(original_msg, title)
+
                 # Create clean dictionary
                 cleaned_list.append({
                     "id": item.get('id'),
                     "date": item.get('announcementDate').split(" ")[0],
-                    "title": item.get('subject'),
-                    "message": item.get('message'),
+                    "title": title,
+                    "message": original_msg, # Keep full original
+                    "summary": ai_summary,   # NEW AI FIELD
                     "files": files
                 })
                 
@@ -100,4 +145,5 @@ def download_ktu_file(file_id):
 
 if __name__ == "__main__":
     print("Testing Announcement Fetch...")
+    # This will print the first result to console so you can check if it works
     print(json.dumps(get_ktu_announcements()[:1], indent=2))
