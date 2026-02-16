@@ -3,12 +3,12 @@ from sqlmodel import Field, SQLModel
 
 # 1. Database Table (What is stored in DB)
 class User(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    email: str = Field(unique=True, index=True)
-    password_hash: str # We store the HASH, not the real password
+    email: str = Field(primary_key=True)
+    password_hash: str
     full_name: str
-    semester: str      # e.g., "S6"
-    department: str    # e.g., "CS"
+    semester: str
+    department: str
+    is_admin: bool = Field(default=False) # <--- NEW FIELD
 
 # 2. Registration Form (What Frontend sends for Sign Up)
 class UserCreate(SQLModel):

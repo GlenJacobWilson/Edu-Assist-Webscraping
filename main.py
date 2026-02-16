@@ -119,13 +119,14 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), session: Session = D
     # 3. Generate Token
     access_token = create_access_token(data={"sub": user.email})
     
+   # ... inside login function ...
     return {
         "access_token": access_token, 
         "token_type": "bearer",
         "user_name": user.full_name,
-        "semester": user.semester
+        "semester": user.semester,
+        "is_admin": user.is_admin # <--- SEND THIS TO FRONTEND
     }
-
 # --- PERSONALIZATION ROUTES (Pins) ---
 
 @app.post("/pin/{notification_id}")
@@ -233,3 +234,24 @@ def vote_question(q_id: int, session: Session = Depends(get_session)):
         session.add(q)
         session.commit()
     return {"votes": q.votes}
+
+@app.delete("/forum/question/{q_id}")
+def delete_question(q_id: int, session: Session = Depends(get_session), user_email: str = Depends(get_current_user)):
+    # 1. Check if user is Admin
+    user = session.exec(select(User).where(User.email == user_email)).first()
+    if not user or not user.is_admin:
+        raise HTTPException(status_code=403, detail="Only Admins can delete questions")
+
+    # 2. Find and Delete Question
+    question = session.get(Question, q_id)
+    if not question:
+        raise HTTPException(status_code=404, detail="Question not found")
+    
+    # Optional: Delete associated answers too (Cascade delete)
+    answers = session.exec(select(Answer).where(Answer.question_id == q_id)).all()
+    for a in answers:
+        session.delete(a)
+
+    session.delete(question)
+    session.commit()
+    return {"status": "deleted"}

@@ -23,14 +23,18 @@ function Login() {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
 
-      // Save Token & User Details
+      // --- SAVE USER DATA ---
       localStorage.setItem('token', response.data.access_token);
       localStorage.setItem('user_name', response.data.user_name);
       
-      // Save Semester for the Exam Countdown
+      // 1. Save Semester (For Countdown)
       if (response.data.semester) {
         localStorage.setItem('semester', response.data.semester);
       }
+
+      // 2. Save Admin Status (For Forum Delete Buttons)
+      // We convert the boolean to a string because localStorage only stores strings
+      localStorage.setItem('is_admin', response.data.is_admin); 
       
       // Redirect to Dashboard
       navigate('/dashboard');
@@ -43,8 +47,8 @@ function Login() {
   };
 
   return (
-    <div className="container" style={{ maxWidth: '400px', marginTop: '80px' }}>
-      <div className="card">
+    <div className="container">
+      <div className="card" style={{ maxWidth: '400px', margin: '80px auto' }}>
         <h2 className="title" style={{ textAlign: 'center', marginBottom: '20px' }}>Welcome Back</h2>
         
         {error && (
