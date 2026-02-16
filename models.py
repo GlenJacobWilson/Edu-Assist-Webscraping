@@ -37,3 +37,21 @@ class PinnedNotification(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     user_email: str = Field(index=True) # Who pinned it?
     notification_id: int                # Which KTU ID? (e.g., 5024)
+
+# ... (Keep existing User and PinnedNotification classes) ...
+
+class Question(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    title: str
+    content: str
+    user_name: str
+    timestamp: str
+    votes: int = 0
+    # We will fetch answers manually to keep things simple
+
+class Answer(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    question_id: int # Links this answer to a specific question
+    user_name: str
+    content: str
+    timestamp: str

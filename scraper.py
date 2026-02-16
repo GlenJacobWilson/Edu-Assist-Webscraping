@@ -25,7 +25,7 @@ session = requests.Session()
 
 # 3. CONFIGURE HEADERS & TOKEN
 # ⚠️ IMPORTANT: Replace this with your NEW x-Token from the browser ⚠️
-CURRENT_TOKEN = 'cq3Cmtn0K/0cAFcWeA7RRZf8TW749NaCmYtVZMNSbcUnaM9neEYwUq_Y2aGgN3Vn-Vv_16PS5-tmOgcFjNrLO5mFzlJ6Ji7JTaQlBn_LrGxQXkm0XjVPPsgxnpcnTimi3u4GVUKB4OtX6rbOHNm8SMcL2_6eJOfLFjvi9q6xzQEdPMimLcmUqqq_NMtPtTg8Hc3-q_5yOa2ZuK55BNALXXonkK6k0Erm_9K0mWcEtzltr8K5U93axzuTpsFpRFe1e_Kvo7DCFo3y3qKsGm1aGMcvnTLonKRZQZPU2MIMzKYKI4hzC_u8M_BZoyxiJjqmtAtBTy6mCUyLV4k2cBzZZEvVn2_p9yOhJI8DE_dfoT8-Gz8iuuv9Ih-q5TgGoanrMhoS_kt9LtJlVN4vAEJm2cgetTAvD0v5SIhlz_VDtyGJ2-eOmM0q8XRDVxo9MXRgToMJKoapdk8AJ5_8-WNmnj9iaoRfdI-V2h0Qoj0lOYZjyONnyt5XHcnWo-rcJxlia2K4ro06czOiM1tne5ukayNWf1V92wXAQMxoOzEWizQ5anjepT-MGCVdEJ-L3ih_6qgqdNz663DKwWfqo3Bc_8P3cDvU2t7S0b-kxwJMwTGA5yo4eoPL5CUAUokIzgthj1-ZvtfJ_7sJkSvnOurz4KpC7txeEZlH4EFAQvC8_jfDHCFqym35JWsJKM1PU5vmDNFP-0DpZ7sqTDMuIFEbGlbnb-RvXFUKWqO3Y7dvyPGt3awhICJZi-fsGHkKZLkHZ_9GffRFlgFGTiTXs5m1E8ZcmVJ7AsG2WKI5evsveCHpgvyObtrC08vDP3IFNN8AdIHP8G2BcHp_zU0-BjW2wU04JItzYCNYr1lACrnBaNBgKnquv1wvVOVtsRjbn1cmvoZjlcNzq_S0TU3EQHaMIGf9L8KpePLw1JUeTpAs3P-Csf7ST_p3eGWzJD-LJM4mH0Pyn01Ee86-DamPblr3n8qpovitgf8TZxHb5n0DQxFsFDxhAzQdzJmpzfZMApj9jNNLoIzJjVJzjumBzEnDMLOEU1-mTDYYms1hvexpdos04Bx3hmfMDLCH4HxnlohUQ3bvT317A6JGtOCIVbCxnXVWqoIiyvcwm7knDXwOC2-CvQTkIs8Oqy8deltmA6BYSJnr3hjmkBTyAbK6m6m5SloppMTusorMf7zDW_pcgKE7bZgMxUNbTRTwY35alOwirYbj1p3o7SJwqSUj3HFQFxPm_vc7b-CbFJgGNVz0PIg8ctZN3s7rpwogU86yfCztB9wNEctUpQYdvArhAe6Rt3xTYK51w1kHvzlTsZpzjRotYkpTdHwYRnlxcwPg4xkMYGp26Fuw583ItKBgLCZ6A3Rv8YKmkgiXl3AdgUNbjCZUzv32RugjJMzSWGjh5cLMe2qfAL4KVy22z4BXiRfFAtlW1f7M8Zr2m0BS1dNQ0vp4yCsb0R2TXs6dn8PVDL-twT5fBoUhyqAH6wD9vQ0tJF7F4mt2ZUzUpUhWnJyS8rIuPnhL7WPCfw6i1vYF0W819TNFhKoZAl6YsB_UCgC1Sr_TS0qApmbvnTe5x4JFb-NoSLVjBxL1P9M8o2EhRSNqROsFNP0OKgDYrwVd31DIOJI_b16kyjF6A5hmEcX790Mv7Q9i7D3vgxMHMfGXgX9x3vIe-R1vuj7RswWox0WPHzYK5is7a9EKb5ArDu3YMmkMPjBXOyHOR43DCyijnQiauxCjzbrG7wbOU4ndA2Aid8hYL2jF53WcBSrvZZSiUC-X99ik3xzyVK3lD0qBb9E4ps71eBksjUKC96fga84fBdYCi60Lstxcfc-pUPDBDacxmNVGurs0pU38e3PJJ2vnGOJKAcjTU4q19koSd76MudRYzaKZjci9nH_pHtbsaPwL3aUicMm65OV6XHBrxJUbYTSOGZpt40Yz5N26ZkAkSk2XrB5Jl1ISl8bvxLUEfiBCEbCP5qU3DB4aIMVrb9aT7_qlos2RMm_tb8bwSmxw7mi_hDDlV1A2JmoIeu8RN4uS81aw2rM-VyvRCHPVQbYD9BMGRyBC7_-ThDY8mk21PLXILz0CmM5dyxqSzEdAxoYz8yC4rx0GInIjxzmnH_Xjd0MrMqgM3CS3hsJ67M5hrL6I8BDULlPt8WDqf58NG6lKe-rQXLTFPpT48d70W4WJQrJYB5+ldzDhzl++6LfKyPAqAAAAAGBsUvD6QfSnqOyFFuzzVxT3s9dx' 
+CURRENT_TOKEN = 'wklt54NMnN0cAFcWeA7jBaXqpNwAQr998uAv-bY5PIsDHdUzgMSdTO2OGIFEVjLwTQA-Poz0c3w7OMmmiAPQQZPPqzHwjAfEk5tOWJd1TlC_sZvKzrHy7Vt3BSYhWtu2GSQn_5WAaPc3L4zmzvWc1DibHzSmNF2wpf6w-RYZIK56ZDp3_XD8UhwPFBmmyizfSQMvkNRoGCkUGpTC2n_B-4so1s5B6hwGmwBMePBsayS0AetAA99ecJeSHzBoIhyQkUGB2auEUvhmVmiqBc7sLsS4S4gHSRtXmvQiuOJI21EbmdN0rhZe7BZIao8x1I9TL4lNVb0vQaruxQVCuXJHZpQn11gvRTAOZd0Uv76b3qZ8z1Gj3_3FJmnh9bymrMzgjHiDOz7EHjZmuX7soOUTDXFgj_ll6iGh6KlZymtvLcC2R2c0914lcYffvgZ3NYYliU9ptTQlumduGMMPgZiV-UtXNbr3zfhSVBZAhgVB5VF7D5JFHE7tvnmA1nCEr6yI6nGvkEAwPlVPntCBBqi6b8cgvZLl3hdxrha79pF8rduZLVtZkWejZjmQoUrpexm86GX7CkNs4VYmV700DDa94GWxrmLDDF_YRXpAIRIXoRQn5sK4WX-aF2uyCTRo9CI_7ACXW4NB_1EILeaqRYNYeCbAud5i-pQALRUvQj1c_nV4-YdwhChgITUbgSnHyXcbM4QPpUFNLBO-N9-pYO2g7K4uyqsgfeXJ55Q1zIdSjwlBAc_hz3meVpxHQ7bRgzj3ZoE-FMFk-Xp0uY9-BC5cPr8tjZZgvWUyKQDikSdbhv-TVL4w2rfIOzER34WcGxul9Vz_4hFBDEPXXTFaRWGyqZ-Or7tpkfRZaGFH4l9CLSNfrsYIbDZQdM4DK21f8bRH5zftyHSoACpOQkKIZqkAwUUswjhDtJOV_MIMM7Ap4201JDup8ZKr9ol-aqpOKnIJ6FeJL8Udjy3Tvsp_UnApAMLVaS4tNe1N-uIZ6zwhI_PONXIOMtKJRjsMz7czxymiIaSKD6K5_Mc1ARqbINsb7VQEQR8FjK1l8zI_Euhnn9EGoqTrPqg8zN3BBeHiAEDRA4t2XvOHNu-uqn5-mqVtlHJ96hJj_FT7RLJqECYZEDY04UgHJnrNAvrGOacackPNfQW3fi9lcjYMWHJSHRzHCLvvarsuiWuMy98FGMJk__EJsSPysEHN3CYvWfG501xaax0azW7GksgUXXcxunKYxhre2KKCeoqqX27yV6CfUM455nqli55Ml4pMavW8pXo9KAev4aFa-soiC727FxXX3XwQg-eBToRGP6HHpbfBfYFTf777LeizHTFTA201q17BNaHofsJVvrj7lWlx4EkcjXFDlKAe-QltMufFbkdHV10dkPYS8PUfAjXVG8yAK91Dmri6ReY5Q6Qj-4HN6HEM6PfK2I26Z74gBqvMbknnI2lO6DOZLOfiOjgFq0gd_DEtOsxrZl0-vcKeCIbZBbRP5ft2ihKHdyuUiKytT7fGqR9ETde2eCG71XDCJDQ6AGclaevnaheaUSA-X_JrfG01Yunhve0SdGe7cZvHyr3DGSqt0RzrNQgWfmMNDZ-cKwt8QBrg1azO88M2mTypELAryvqQpZtJn9l0kD_i8oSuk-PUynYdzgWLLvH4O8vJCLX2hFhtBIcRj8X--3oP1C_Dx4aJBbOtlkE7QvqZFliddAQIODY9I_Nzao250BG0-7N9p5AYTyM8JrFUdGLAC9qfC21F9QOagTKMbPyRguhwGNVlaTS_ApOuQbtHqGqVqk60NXz2Fq9i-PmgY46sf9kKhLdKAu39yc13JLL-3XqBoec4eyodaZvbxgOaaeV2R_tNvgkbxbn1M3KRtMmEp9WWj-LGhvfTsgln204cStjGcnC-0EEQGPkPfWfUKT28pB53P91LWTmADH3zR_W0CUTWfmYYbhtbsW9nc3HLdzhUADxvtMTjwGs9aSoIriO0lQjL5qCb1WfzrdV9m8AlfdkLcYQz1jsSGuSYh_hG5JCCmHfcjhxc1NLhO4Jf0Tc4TnNgKY-BsVqOQlI13qQpDaWBwZTy6SMPbem8bfXMZyZssLVyW6gi1U=======++6LfKyPAqAAAAAGBsUvD6QfSnqOyFFuzzVxT3s9dx'
 
 session.headers.update({
     'Accept': 'application/json, text/plain, */*',
@@ -36,17 +36,34 @@ session.headers.update({
     'x-Token': CURRENT_TOKEN
 })
 
+# --- URGENCY CHECK FUNCTION ---
+def check_urgency(title, message):
+    # Ensure inputs are strings (Fixes "NoneType" error)
+    title = title or "" 
+    message = message or ""
+    
+    urgent_keywords = ['exam', 'registration', 'fee', 'time table', 'deadline', 'result', 'postponed', 'hall ticket']
+    
+    combined_text = (title + " " + message).lower()
+    
+    for keyword in urgent_keywords:
+        if keyword in combined_text:
+            return True
+    return False
+
 # --- AI SUMMARY FUNCTION ---
 def generate_summary(html_content, title):
+    # Ensure inputs are strings
+    html_content = html_content or ""
+    title = title or ""
+
     # 1. Clean HTML to Text
-    soup = BeautifulSoup(html_content or "", 'html.parser') 
+    soup = BeautifulSoup(html_content, 'html.parser') 
     text = soup.get_text(" ", strip=True) 
     
     # 2. INTELLIGENT FALLBACK
-    # If the message is basically empty (just "Refer attachment" or nothing),
-    # use the Title as the summary context.
     if len(text) < 50: 
-        return f"📌 {title}" # Just return the title with an icon
+        return f"📌 {title}"
 
     # 3. Run TextRank AI on longer text
     try:
@@ -62,15 +79,9 @@ def generate_summary(html_content, title):
 
 def get_ktu_announcements():
     url = 'https://api.ktu.edu.in/ktu-web-portal-api/anon/announcemnts'
-    
-    json_data = {
-        'number': 0,
-        'searchText': '',
-        'size': 20, 
-    }
+    json_data = {'number': 0, 'searchText': '', 'size': 20}
 
     try:
-        # Use session.post to maintain connection
         response = session.post(url, json=json_data, verify=False)
         
         if response.status_code == 200:
@@ -86,64 +97,55 @@ def get_ktu_announcements():
                         "id": attachment.get('encryptId')
                     })
 
-                # --- GENERATE AI SUMMARY ---
-                original_msg = item.get('message', '')
-                title = item.get('subject', '') # Get title
+                # --- SAFETY FIX: Use 'or ""' to prevent NoneType errors ---
+                original_msg = item.get('message') or "" 
+                title = item.get('subject') or ""
                 
-                # FIX: Pass BOTH message and title to the function
+                # 1. Generate Summary
                 ai_summary = generate_summary(original_msg, title)
+                
+                # 2. Check Urgency
+                is_urgent = check_urgency(title, original_msg)
 
-                # Create clean dictionary
                 cleaned_list.append({
                     "id": item.get('id'),
                     "date": item.get('announcementDate').split(" ")[0],
                     "title": title,
-                    "message": original_msg, # Keep full original
-                    "summary": ai_summary,   # NEW AI FIELD
+                    "message": original_msg, 
+                    "summary": ai_summary,   
+                    "is_urgent": is_urgent,
                     "files": files
                 })
                 
             return cleaned_list
         else:
-            return {"error": f"Failed with status: {response.status_code}"}
+            return []
 
     except Exception as e:
-        return {"error": str(e)}
+        print(f"Scraper Error: {e}")
+        return []
 
 def download_ktu_file(file_id):
     url = "https://api.ktu.edu.in/ktu-web-portal-api/anon/getAttachment"
     payload = { 'encryptId': file_id }
 
     try:
-        # Use session.post here too!
         response = session.post(url, json=payload, verify=False)
-        
         if response.status_code == 200:
-            # OPTION 1: Raw Base64 string (Standard for your token)
             if response.text.startswith("JVBERi"):
-                print(f"Decoding Raw PDF for ID: {file_id[:10]}...")
                 return base64.b64decode(response.text), "application/pdf"
-            
-            # OPTION 2: JSON Wrapper
             try:
                 data = response.json()
                 if 'dataBytes' in data:
                     return base64.b64decode(data['dataBytes']), "application/pdf"
             except:
                 pass
-
-            # OPTION 3: Binary
             return response.content, "application/pdf"
-            
         else:
-            print(f"Download Error: {response.status_code}")
             return None, None
-
-    except Exception as e:
-        print(f"Error downloading: {e}")
+    except Exception:
         return None, None
 
 if __name__ == "__main__":
     print("Testing Announcement Fetch...")
-    # This will print the first result to console so you can check if it works
     print(json.dumps(get_ktu_announcements()[:1], indent=2))

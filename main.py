@@ -5,10 +5,13 @@ from contextlib import asynccontextmanager
 from sqlmodel import Session, select
 from jose import JWTError, jwt
 from typing import List
+from datetime import datetime  # <--- NEW IMPORT
 
 # --- IMPORTS FROM YOUR FILES ---
 from database import create_db_and_tables, engine
-from models import User, UserCreate, Token, PinnedNotification 
+# Added 'Discussion' to imports
+# Remove 'Discussion' and add 'Question', 'Answer'
+from models import User, UserCreate, Token, PinnedNotification, Question, Answer 
 from auth import get_password_hash, verify_password, create_access_token, SECRET_KEY, ALGORITHM
 from scraper import get_ktu_announcements, download_ktu_file
 
@@ -159,3 +162,74 @@ def get_my_pins(session: Session = Depends(get_session), user_email: str = Depen
     statement = select(PinnedNotification.notification_id).where(PinnedNotification.user_email == user_email)
     results = session.exec(statement).all()
     return results
+
+# ... (Keep imports and previous code) ...
+
+# --- QUORA-STYLE FORUM ROUTES ---
+
+# 1. Get All Questions (with Answers)
+@app.get("/forum")
+def get_forum_data(session: Session = Depends(get_session)):
+    questions = session.exec(select(Question).order_by(Question.timestamp.desc())).all()
+    
+    # We need to nest answers inside questions for the frontend
+    full_data = []
+    for q in questions:
+        # Find answers for this specific question
+        answers = session.exec(select(Answer).where(Answer.question_id == q.id)).all()
+        full_data.append({
+            "id": q.id,
+            "title": q.title,
+            "content": q.content,
+            "user_name": q.user_name,
+            "timestamp": q.timestamp,
+            "votes": q.votes,
+            "answers": answers
+        })
+        
+    return full_data
+
+# 2. Post a Question
+@app.post("/forum/question")
+def post_question(data: dict, session: Session = Depends(get_session), user_email: str = Depends(get_current_user)):
+    user = session.exec(select(User).where(User.email == user_email)).first()
+    
+    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    new_q = Question(
+        title=data['title'],
+        content=data['content'],
+        user_name=user.full_name,
+        timestamp=now,
+        votes=0
+    )
+    session.add(new_q)
+    session.commit()
+    return {"status": "posted"}
+
+# 3. Post an Answer
+@app.post("/forum/question/{q_id}/answer")
+def post_answer(q_id: int, data: dict, session: Session = Depends(get_session), user_email: str = Depends(get_current_user)):
+    user = session.exec(select(User).where(User.email == user_email)).first()
+    
+    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    new_a = Answer(
+        question_id=q_id,
+        content=data['content'],
+        user_name=user.full_name,
+        timestamp=now
+    )
+    session.add(new_a)
+    session.commit()
+    return {"status": "answered"}
+
+# 4. Upvote a Question
+@app.post("/forum/question/{q_id}/vote")
+def vote_question(q_id: int, session: Session = Depends(get_session)):
+    q = session.get(Question, q_id)
+    if q:
+        q.votes += 1
+        session.add(q)
+        session.commit()
+    return {"votes": q.votes}

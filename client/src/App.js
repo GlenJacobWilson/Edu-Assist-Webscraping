@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import GPACalculator from './GPACalculator';
+import Discussion from './Discussion'; // <--- 1. IMPORT DISCUSSION
 
 // Import the Login and Register pages
 import Login from './Login';
 import Register from './Register';
 import './App.css'; 
 
-// --- 1. THE PERSONALIZED DASHBOARD COMPONENT ---
+// --- THE PERSONALIZED DASHBOARD COMPONENT ---
 function Dashboard() {
   const [announcements, setAnnouncements] = useState([]);
   const [pinnedIds, setPinnedIds] = useState([]); 
@@ -69,7 +70,7 @@ function Dashboard() {
             setAnnouncements(ktuRes.data);
         } else {
             console.error("Backend returned an error:", ktuRes.data);
-            setAnnouncements([]); // Set empty list so app doesn't crash
+            setAnnouncements([]); 
         }
         // --- SAFETY CHECK END ---
         
@@ -86,7 +87,7 @@ function Dashboard() {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setAnnouncements([]); // Safety fallback
+        setAnnouncements([]); 
         setLoading(false);
       }
     };
@@ -126,7 +127,6 @@ function Dashboard() {
   };
 
   // --- SORTING ---
-  // We use "Array.isArray" to be 100% sure it's a list before sorting
   const safeAnnouncements = Array.isArray(announcements) ? announcements : [];
 
   const sortedAnnouncements = [...safeAnnouncements].sort((a, b) => {
@@ -137,9 +137,12 @@ function Dashboard() {
     return 0;
   });
 
+  // --- FILTER URGENT ALERTS ---
+  const urgentAlerts = safeAnnouncements.filter(item => item.is_urgent);
+
   return (
     <div className="container">
-      {/* IMPROVED HEADER */}
+      {/* HEADER */}
       <header className="dashboard-header">
         <div className="welcome-section">
           <h1>{getGreeting()}, {userName}.</h1>
@@ -152,6 +155,11 @@ function Dashboard() {
             <span className="count-label">Days to Exam</span>
           </div>
           
+          {/* --- 2. NEW FORUM BUTTON --- */}
+          <button onClick={() => navigate('/discussion')} className="gpa-btn" style={{background:'#6c5ce7'}}>
+             🗣️ Forum
+          </button>
+
           <button onClick={() => navigate('/gpa')} className="gpa-btn">
              📊 GPA Manager
           </button>
@@ -162,21 +170,72 @@ function Dashboard() {
         </div>
       </header>
 
+      {/* --- ALERT SYSTEM UI --- */}
+      {urgentAlerts.length > 0 && (
+        <div className="alert-section" style={{ 
+            background: '#fff1f2', 
+            border: '1px solid #e11d48', 
+            borderRadius: '12px', 
+            padding: '16px', 
+            marginBottom: '24px',
+            boxShadow: '0 4px 6px -1px rgba(225, 29, 72, 0.1)'
+        }}>
+          <h3 style={{ 
+              color: '#9f1239', 
+              margin: '0 0 12px 0', 
+              fontSize: '1.1rem', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '10px' 
+          }}>
+            <span style={{ fontSize: '1.4rem' }}>🔔</span> 
+            Action Required: Upcoming Deadlines
+          </h3>
+          <ul style={{ margin: 0, paddingLeft: '25px', color: '#881337', fontSize: '0.95rem' }}>
+            {urgentAlerts.slice(0, 3).map(alert => (
+              <li key={alert.id} style={{ marginBottom: '6px' }}>
+                <strong style={{marginRight: '8px'}}>{alert.date}:</strong> 
+                {alert.title}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {loading ? (
         <div className="loading">Loading announcements...</div>
       ) : (
         <div className="grid">
           {sortedAnnouncements.map((item) => {
             const isPinned = pinnedIds.includes(item.id);
-            // CHECK IF MESSAGE IS ACTUALLY EMPTY
             const hasMessage = item.message && item.message.replace(/<[^>]*>?/gm, '').trim().length > 0;
+            
+            // Dynamic Style for Urgent Cards
+            const cardStyle = item.is_urgent 
+                ? { borderLeft: '5px solid #e11d48' } 
+                : {};
 
             return (
-              <div key={item.id} className={`card ${isPinned ? 'pinned-card' : ''}`}>
+              <div key={item.id} className={`card ${isPinned ? 'pinned-card' : ''}`} style={cardStyle}>
                 <div className="card-header">
                   <span className="date">{item.date}</span>
                   
-                  <div style={{display:'flex', gap:'10px'}}>
+                  <div style={{display:'flex', gap:'10px', alignItems: 'center'}}>
+                     {/* URGENT BADGE */}
+                     {item.is_urgent && (
+                        <span className="tag urgent" style={{
+                            background: '#e11d48', 
+                            color: 'white', 
+                            padding: '4px 8px', 
+                            borderRadius: '4px', 
+                            fontSize: '0.75rem', 
+                            fontWeight: 'bold',
+                            letterSpacing: '0.5px'
+                        }}>
+                            URGENT
+                        </span>
+                     )}
+
                      {item.title.toLowerCase().includes('exam') && <span className="tag exam">Exam</span>}
                      {item.title.toLowerCase().includes('result') && <span className="tag result">Result</span>}
                      
@@ -247,6 +306,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/gpa" element={<GPACalculator />} />
+        {/* --- 3. ADD THE ROUTE --- */}
+        <Route path="/discussion" element={<Discussion />} />
       </Routes>
     </Router>
   );
