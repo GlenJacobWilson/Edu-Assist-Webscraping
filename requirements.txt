@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+sqlmodel
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+httpx
+anthropic
+requests
+beautifulsoup4
+sumy
+nltk
