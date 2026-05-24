@@ -1,151 +1,120 @@
+# -*- coding: utf-8 -*-
 import requests
 import urllib3
 import json
 import base64
-from bs4 import BeautifulSoup 
-
-# --- AI IMPORTS ---
+import os
+from bs4 import BeautifulSoup
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.text_rank import TextRankSummarizer
 import nltk
 
-# Download necessary NLTK data (Run once automatically)
-try:
-    nltk.data.find('tokenizers/punkt')
-except LookupError:
-    nltk.download('punkt')
-    nltk.download('punkt_tab')
+for resource, path in [("punkt", "tokenizers/punkt"), ("punkt_tab", "tokenizers/punkt_tab")]:
+    try:
+        nltk.data.find(path)
+    except LookupError:
+        nltk.download(resource, quiet=True)
 
-# 1. Disable SSL warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-# 2. Create a Persistent Session
+# Load token from environment variable (for deployment)
+# Falls back to hardcoded token for local development
+KTU_TOKEN = os.getenv("KTU_TOKEN", "kCxCho5yR30cAFcWeA7ZIlwyaz96il62Tq63HxXN-z8WjhpbzoV_-I6hYatZZOsXTgqrfZsoGgRpBkvBYGxvNK-oRPaeqXv38JY3pNcf0FNraYfjsOscAtWdMtJ07FxYZm8tsoQjS0i94z8jIoNyitijhIFLqN_ILSS2yjsbSL2xhx70CI1tEsUjRY9qogGrFbqAbHuAvm1myKngyrANhSo7NwsfN1aYDiMCUSe_Rs4jwQpQjtsGD_1tkDZdAWh7XLSkZ0bY3TTkKZ4-0Ljzin_LzmObLPDoZTRySjiRvqR4ZuL_9vwiW6WnwSEFcqUoYEEBdDi1yvKnTf16WFxBU-UXMjKYGpCbDy1BhlO8tsljkpOKQxablfAhzVTzN5ItWHYtY0AfzqHruySc-UkMhXs6s2EPH73IbEvZ88usAct9fqVCJGNZLkMancX1bhvrXk6FWNwidLaf2aNoT_2h35CdYTkQrAVvaVrAAvjZ9xgCsnNnvwohYXiiOtGr0lKTYBE92rnFIaQoNFNLQEhIQyes8xn4Fl2ZBIVvpXH3W0izdUoP_PvzNo7wu7KXSRaG2GR_ko9DzdRDHBb56GMp0nKkLSFjbwME-s4uRbs2ZLZNqw0zJ46An6xxK5ObHIJVb7IkOh-WdMjyx3Jyv4HnRp1Ht0tI2SPNagmlaXyPlKlbj_GYwecKw-mkITcNzFIfE9bHG2Agp4nxjOQeX6m2SPZ2xHNuJGfyusbLsSRNiJ-4ZdaNkyvuTJmuTsiQGO5yheW30pn2wOhZkpIFD1n1iPAEM19gt8UWsjVmplVqTcw9gdY7etJtW1uvcLNgcVNEJp2g1rENSjvx31cvE34nDhCFUtoPdmb4KEsAw0f3JIYxUD59hnLUOdt0_QhAPpiLJDfdCAFq3GTEczRNo5lwHSa5BQ5QKXXa6XzUpbhrh8YFZ7fuy8ImLjcDdS8IOvhCTxeg9AlmPj_Zl5l3Zzka0EduAOf3t53eraQgsqWH_GGsEB15UVqoq961r4MbN2H7tS-DX40IR4b50xZOgS-XLsWAE9x2Uv56QlLzHqhDv_-PP7R5blFgoz1mInGhF_cXBavfEbvgV8oyKVDtJVb40dEG9qMit1Tg5BerB6-vwTLVmtgAuimBBKRxeMwYnBNW8PhScfM62IkZxShhYO3P8PiG7-K8sMyJICclKLaQM2uVJngPaPREetkj3OFmAKST_SBnYZ_kHp6N3m8Pdk2r5MWSWL6M4h70iVsUTIWgf-J04capspRQqmNtbSSRYhWVd_daK_5F4G6t-TEsLoQ7P9FZwd5YWkJh1YT-VA59TP_hhtfcNFi0w-gUxyokA-ePo6s47xZ5VHoLGVLy9uQKOb3ru6S9kd6fTnVYz6reIWiASdrclj9Lobf6opbS1R2YrnwmnSboI9h9CIKfS1jUH5MVyPmEB8-7qSU7vMBx_YjDGiwwQmcRrrDZpHCLWoqHgdlgFfEppXfwHup8fbjfpcEP-NZ5PRALBbE-L1KMfVUMKf_qfcUNJ97vr9a2M1DI_lgvMuueMOokUISlBM_YkzLUJI0L9fC6W81CHBzGjx_i8hlI5QQ8jd0xN8ZlgD1j7I1tF6FKxlkfAL9ON-gDEEBoVF6a-TUfrsr2B2ER3yhPSySgHXyymk8g75WHeRk91zpnlW9b_Wgf58LsR1KGz5bao3UMBi7VPBeaGlvKd60avBVzdfFvzmKmTmzP45p2t7_NMSiYFMQ09o1j2rIXgJEmW9tbHcEbLhGNTipbt8XLjY9UAmPh_2_9WEwhxG9I2lslRP07RZfIdJssRTVdRey8umS1OIoWIxIEa66_oAl1X1d_vBg6cn6jrrfEYy34avcN0FmAoOWyH4UdouigInzb89g912KqfPyd1Y2LLewBV2Vmt2XknxBxDymKpzg_eKWhmteT9pEBboOAqbpK5biYco7ba6RxjW5eV-Od3JhdbOhLhrIf8_4GR-3_jZXD_pxyUfXSgr8PxTxpxf15qUkbeNE9Vtuo4kL9Fl1EfOqHZW07gqvGEGtaPJNZ3PNPqedTNWc1qIox3Pe_EEk5B7lLIINNDl_6kFjo1dSXo51hHRMA0Rp1x3b7-G7JiK3ohj2D8ZY6bdP7GRxemUuejdV1iVBLtLkbLVjZ9GqB_oMj9ohj3r1cm_N8PBbPLyEKMy3jkqw0_Z5P7896_tqcsw-3oslY46BBpJd++6LfKyPAqAAAAAGBsUvD6QfSnqOyFFuzzVxT3s9dx")
+
 session = requests.Session()
-
-# 3. CONFIGURE HEADERS & TOKEN
-# ⚠️ IMPORTANT: Replace this with your NEW x-Token from the browser ⚠️
-CURRENT_TOKEN = 'wklt54NMnN0cAFcWeA7jBaXqpNwAQr998uAv-bY5PIsDHdUzgMSdTO2OGIFEVjLwTQA-Poz0c3w7OMmmiAPQQZPPqzHwjAfEk5tOWJd1TlC_sZvKzrHy7Vt3BSYhWtu2GSQn_5WAaPc3L4zmzvWc1DibHzSmNF2wpf6w-RYZIK56ZDp3_XD8UhwPFBmmyizfSQMvkNRoGCkUGpTC2n_B-4so1s5B6hwGmwBMePBsayS0AetAA99ecJeSHzBoIhyQkUGB2auEUvhmVmiqBc7sLsS4S4gHSRtXmvQiuOJI21EbmdN0rhZe7BZIao8x1I9TL4lNVb0vQaruxQVCuXJHZpQn11gvRTAOZd0Uv76b3qZ8z1Gj3_3FJmnh9bymrMzgjHiDOz7EHjZmuX7soOUTDXFgj_ll6iGh6KlZymtvLcC2R2c0914lcYffvgZ3NYYliU9ptTQlumduGMMPgZiV-UtXNbr3zfhSVBZAhgVB5VF7D5JFHE7tvnmA1nCEr6yI6nGvkEAwPlVPntCBBqi6b8cgvZLl3hdxrha79pF8rduZLVtZkWejZjmQoUrpexm86GX7CkNs4VYmV700DDa94GWxrmLDDF_YRXpAIRIXoRQn5sK4WX-aF2uyCTRo9CI_7ACXW4NB_1EILeaqRYNYeCbAud5i-pQALRUvQj1c_nV4-YdwhChgITUbgSnHyXcbM4QPpUFNLBO-N9-pYO2g7K4uyqsgfeXJ55Q1zIdSjwlBAc_hz3meVpxHQ7bRgzj3ZoE-FMFk-Xp0uY9-BC5cPr8tjZZgvWUyKQDikSdbhv-TVL4w2rfIOzER34WcGxul9Vz_4hFBDEPXXTFaRWGyqZ-Or7tpkfRZaGFH4l9CLSNfrsYIbDZQdM4DK21f8bRH5zftyHSoACpOQkKIZqkAwUUswjhDtJOV_MIMM7Ap4201JDup8ZKr9ol-aqpOKnIJ6FeJL8Udjy3Tvsp_UnApAMLVaS4tNe1N-uIZ6zwhI_PONXIOMtKJRjsMz7czxymiIaSKD6K5_Mc1ARqbINsb7VQEQR8FjK1l8zI_Euhnn9EGoqTrPqg8zN3BBeHiAEDRA4t2XvOHNu-uqn5-mqVtlHJ96hJj_FT7RLJqECYZEDY04UgHJnrNAvrGOacackPNfQW3fi9lcjYMWHJSHRzHCLvvarsuiWuMy98FGMJk__EJsSPysEHN3CYvWfG501xaax0azW7GksgUXXcxunKYxhre2KKCeoqqX27yV6CfUM455nqli55Ml4pMavW8pXo9KAev4aFa-soiC727FxXX3XwQg-eBToRGP6HHpbfBfYFTf777LeizHTFTA201q17BNaHofsJVvrj7lWlx4EkcjXFDlKAe-QltMufFbkdHV10dkPYS8PUfAjXVG8yAK91Dmri6ReY5Q6Qj-4HN6HEM6PfK2I26Z74gBqvMbknnI2lO6DOZLOfiOjgFq0gd_DEtOsxrZl0-vcKeCIbZBbRP5ft2ihKHdyuUiKytT7fGqR9ETde2eCG71XDCJDQ6AGclaevnaheaUSA-X_JrfG01Yunhve0SdGe7cZvHyr3DGSqt0RzrNQgWfmMNDZ-cKwt8QBrg1azO88M2mTypELAryvqQpZtJn9l0kD_i8oSuk-PUynYdzgWLLvH4O8vJCLX2hFhtBIcRj8X--3oP1C_Dx4aJBbOtlkE7QvqZFliddAQIODY9I_Nzao250BG0-7N9p5AYTyM8JrFUdGLAC9qfC21F9QOagTKMbPyRguhwGNVlaTS_ApOuQbtHqGqVqk60NXz2Fq9i-PmgY46sf9kKhLdKAu39yc13JLL-3XqBoec4eyodaZvbxgOaaeV2R_tNvgkbxbn1M3KRtMmEp9WWj-LGhvfTsgln204cStjGcnC-0EEQGPkPfWfUKT28pB53P91LWTmADH3zR_W0CUTWfmYYbhtbsW9nc3HLdzhUADxvtMTjwGs9aSoIriO0lQjL5qCb1WfzrdV9m8AlfdkLcYQz1jsSGuSYh_hG5JCCmHfcjhxc1NLhO4Jf0Tc4TnNgKY-BsVqOQlI13qQpDaWBwZTy6SMPbem8bfXMZyZssLVyW6gi1U=======++6LfKyPAqAAAAAGBsUvD6QfSnqOyFFuzzVxT3s9dx'
-
 session.headers.update({
-    'Accept': 'application/json, text/plain, */*',
-    'Content-Type': 'application/json',
-    'Origin': 'https://ktu.edu.in',
-    'Referer': 'https://ktu.edu.in/',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
-    'x-Token': CURRENT_TOKEN
+    "Accept": "application/json, text/plain, */*",
+    "Content-Type": "application/json",
+    "Origin": "https://ktu.edu.in",
+    "Referer": "https://ktu.edu.in/",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "x-Token": KTU_TOKEN
 })
+print("[Scraper] Token loaded")
 
-# --- URGENCY CHECK FUNCTION ---
+
 def check_urgency(title, message):
-    # Ensure inputs are strings (Fixes "NoneType" error)
-    title = title or "" 
+    title = title or ""
     message = message or ""
-    
-    urgent_keywords = ['exam', 'registration', 'fee', 'time table', 'deadline', 'result', 'postponed', 'hall ticket']
-    
+    urgent_keywords = ["exam","registration","fee","time table","deadline","result","postponed","hall ticket","supplementary","revaluation"]
     combined_text = (title + " " + message).lower()
-    
-    for keyword in urgent_keywords:
-        if keyword in combined_text:
-            return True
-    return False
+    return any(kw in combined_text for kw in urgent_keywords)
 
-# --- AI SUMMARY FUNCTION ---
+
 def generate_summary(html_content, title):
-    # Ensure inputs are strings
     html_content = html_content or ""
     title = title or ""
-
-    # 1. Clean HTML to Text
-    soup = BeautifulSoup(html_content, 'html.parser') 
-    text = soup.get_text(" ", strip=True) 
-    
-    # 2. INTELLIGENT FALLBACK
-    if len(text) < 50: 
+    soup = BeautifulSoup(html_content, "html.parser")
+    text = soup.get_text(" ", strip=True)
+    if len(text) < 50:
         return f"📌 {title}"
-
-    # 3. Run TextRank AI on longer text
     try:
         parser = PlaintextParser.from_string(text, Tokenizer("english"))
         summarizer = TextRankSummarizer()
-        summary = summarizer(parser.document, 1) 
-        
+        summary = summarizer(parser.document, 1)
         if summary:
             return str(summary[0])
         return text[:100] + "..."
-    except Exception as e:
+    except Exception:
         return text[:100] + "..."
 
-def get_ktu_announcements():
-    url = 'https://api.ktu.edu.in/ktu-web-portal-api/anon/announcemnts'
-    json_data = {'number': 0, 'searchText': '', 'size': 20}
 
+def get_ktu_announcements():
+    url = "https://api.ktu.edu.in/ktu-web-portal-api/anon/announcemnts"
+    json_data = {"number": 0, "searchText": "", "size": 20}
     try:
-        response = session.post(url, json=json_data, verify=False)
-        
+        response = session.post(url, json=json_data, verify=False, timeout=15)
+        if response.status_code in (400, 401, 403):
+            print(f"[Scraper] Token expired ({response.status_code}). Update KTU_TOKEN environment variable.")
+            return []
         if response.status_code == 200:
             raw_data = response.json()
             cleaned_list = []
-            
-            for item in raw_data.get('content', []):
-                # Extract attachments
+            for item in raw_data.get("content", []):
                 files = []
-                for attachment in item.get('attachmentList', []):
-                    files.append({
-                        "name": attachment.get('attachmentName'),
-                        "id": attachment.get('encryptId')
-                    })
-
-                # --- SAFETY FIX: Use 'or ""' to prevent NoneType errors ---
-                original_msg = item.get('message') or "" 
-                title = item.get('subject') or ""
-                
-                # 1. Generate Summary
+                for attachment in item.get("attachmentList", []):
+                    files.append({"name": attachment.get("attachmentName"), "id": attachment.get("encryptId")})
+                original_msg = item.get("message") or ""
+                title = item.get("subject") or ""
                 ai_summary = generate_summary(original_msg, title)
-                
-                # 2. Check Urgency
                 is_urgent = check_urgency(title, original_msg)
-
-                cleaned_list.append({
-                    "id": item.get('id'),
-                    "date": item.get('announcementDate').split(" ")[0],
-                    "title": title,
-                    "message": original_msg, 
-                    "summary": ai_summary,   
-                    "is_urgent": is_urgent,
-                    "files": files
-                })
-                
+                raw_date = item.get("announcementDate") or ""
+                date = raw_date.split(" ")[0] if raw_date else ""
+                cleaned_list.append({"id": item.get("id"), "date": date, "title": title, "message": original_msg, "summary": ai_summary, "is_urgent": is_urgent, "files": files})
             return cleaned_list
-        else:
-            return []
-
-    except Exception as e:
-        print(f"Scraper Error: {e}")
+        print(f"[Scraper] API returned {response.status_code}")
         return []
+    except Exception as e:
+        print(f"[Scraper] Error: {e}")
+        return []
+
 
 def download_ktu_file(file_id):
     url = "https://api.ktu.edu.in/ktu-web-portal-api/anon/getAttachment"
-    payload = { 'encryptId': file_id }
-
     try:
-        response = session.post(url, json=payload, verify=False)
+        response = session.post(url, json={"encryptId": file_id}, verify=False, timeout=15)
         if response.status_code == 200:
             if response.text.startswith("JVBERi"):
                 return base64.b64decode(response.text), "application/pdf"
             try:
                 data = response.json()
-                if 'dataBytes' in data:
-                    return base64.b64decode(data['dataBytes']), "application/pdf"
-            except:
-                pass
+                if "dataBytes" in data:
+                    return base64.b64decode(data["dataBytes"]), "application/pdf"
+            except Exception as e:
+                print(f"[Scraper] Parse error: {e}")
             return response.content, "application/pdf"
-        else:
-            return None, None
-    except Exception:
+        return None, None
+    except Exception as e:
+        print(f"[Scraper] Download error: {e}")
         return None, None
 
+
 if __name__ == "__main__":
-    print("Testing Announcement Fetch...")
-    print(json.dumps(get_ktu_announcements()[:1], indent=2))
+    print("Testing...")
+    results = get_ktu_announcements()
+    if results:
+        print(f"Got {len(results)} announcements")
+        print(json.dumps(results[0], indent=2))
+    else:
+        print("No results — update KTU_TOKEN environment variable")

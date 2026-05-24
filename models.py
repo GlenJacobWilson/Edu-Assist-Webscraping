@@ -73,3 +73,8 @@ class NotifSubscription(SQLModel, table=True):
     whatsapp: str = ""
     notify_email: str = ""
     urgent_only: bool = Field(default=True)
+
+class FCMToken(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user_email: str = Field(index=True)
+    token: str = Field(unique=True)

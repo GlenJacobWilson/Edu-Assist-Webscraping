@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { requestAndRegisterToken } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
@@ -207,6 +208,8 @@ export default function Dashboard() {
       if (pins.status==='fulfilled')   setPinnedIds(Array.isArray(pins.value)?pins.value:[]);
       if (me.status==='fulfilled'&&me.value?.full_name) { setProfileData(me.value); setProfile(me.value); }
       setLoading(false);
+      // Request notification permission after load
+      await requestAndRegisterToken(user.token);
     };
     load();
   },[]);
@@ -323,6 +326,20 @@ export default function Dashboard() {
             <button className="qa-btn outline-amber" onClick={()=>navigate('/attendance')}><i className="fas fa-percent"></i> Attendance</button>
             <button className="qa-btn outline-green" onClick={()=>navigate('/studygroups')}><i className="fas fa-users"></i> Study Groups</button>
             <button className="qa-btn outline-blue"  onClick={()=>navigate('/ai')} style={{borderColor:'#7c3aed',color:'#7c3aed'}}><i className="fas fa-magic"></i> AI Tools</button>
+            <button className="qa-btn outline-green" style={{borderColor:'#059669',color:'#059669'}}
+              onClick={async()=>{
+                try{
+                  const res = await fetch('http://172.30.12.235:8000/notify/test', {
+                    method:'POST',
+                    headers:{Authorization:`Bearer ${user.token}`}
+                  });
+                  const data = await res.json();
+                  if(res.ok) showNotification(`🔔 Notification sent to ${data.devices} device(s)!`,'success');
+                  else showNotification('❌ '+data.detail,'error');
+                }catch(e){showNotification('❌ Failed — is backend running?','error');}
+              }}>
+              <i className="fas fa-bell"></i> Test Notification
+            </button>
           </div>
 
           <div className="dash-inner-grid">

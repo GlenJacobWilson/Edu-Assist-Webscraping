@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import './App.css';
+import { requestAndRegisterToken } from './firebase';   // ← NEW
 
 function Login() {
   const [email, setEmail]       = useState('');
@@ -25,6 +26,7 @@ function Login() {
       localStorage.setItem('user_name', res.data.user_name);
       if (res.data.semester)  localStorage.setItem('semester',  res.data.semester);
       if (res.data.is_admin !== undefined) localStorage.setItem('is_admin', res.data.is_admin);
+      await requestAndRegisterToken(res.data.access_token);  // ← NEW
       navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.detail || 'Login failed. Check your credentials.');
@@ -79,6 +81,29 @@ function Login() {
         <p className="auth-footer">
           New student? <Link to="/register">Create account</Link>
         </p>
+
+        {/* DEMO BUTTON */}
+        <button
+          className="auth-submit"
+          style={{ marginTop: '0.5rem', background: 'var(--gray)', fontSize: '0.85rem' }}
+          onClick={async () => {
+            const token = localStorage.getItem('token');
+            if (!token) { alert('Please log in first'); return; }
+            try {
+              const res = await axios.post(
+                'http://127.0.0.1:8000/notify/test',
+                {},
+                { headers: { Authorization: `Bearer ${token}` } }
+              );
+              alert(`✅ Notification sent to ${res.data.devices} device(s)! Check your phone.`);
+            } catch (err) {
+              alert('❌ ' + (err.response?.data?.detail || 'Failed to send'));
+            }
+          }}
+        >
+          <i className="fas fa-bell" /> Send test notification to my phone
+        </button>
+
       </div>
     </div>
   );
