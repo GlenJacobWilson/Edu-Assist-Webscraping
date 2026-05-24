@@ -22,7 +22,7 @@ export async function requestAndRegisterToken(authToken) {
       vapidKey: "BClvucw2eppby5AAYyXjua0nZBNwS48CtYxptDne0JBcLnxZaGrOlozICSEJiQgPERJGu8UGKTFbqq1FrrHKWFU",
     });
 
-    await fetch("http://172.30.12.235:8000/register-token", {   // ← fixed
+    await fetch(`${process.env.REACT_APP_API_URL}/register-token`, {   // ← fixed
       method: "POST",
       headers: {
         "Content-Type": "application/json",

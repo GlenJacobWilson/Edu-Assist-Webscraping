@@ -329,7 +329,7 @@ export default function Dashboard() {
             <button className="qa-btn outline-green" style={{borderColor:'#059669',color:'#059669'}}
               onClick={async()=>{
                 try{
-                  const res = await fetch('http://172.30.12.235:8000/notify/test', {
+                  const res = await fetch(`${process.env.REACT_APP_API_URL}/notify/test`, {
                     method:'POST',
                     headers:{Authorization:`Bearer ${user.token}`}
                   });
