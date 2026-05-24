@@ -1,4 +1,4 @@
-const BASE = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
+const BASE = 'https://edu-assist-backend-6q9z.onrender.com';
 const tok = () => localStorage.getItem('token');
 const authH = (json=false) => {
   const h = {}; const t = tok();
