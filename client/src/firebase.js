@@ -22,7 +22,7 @@ export async function requestAndRegisterToken(authToken) {
       vapidKey: "BClvucw2eppby5AAYyXjua0nZBNwS48CtYxptDne0JBcLnxZaGrOlozICSEJiQgPERJGu8UGKTFbqq1FrrHKWFU",
     });
 
-    await fetch(`${process.env.REACT_APP_API_URL}/register-token`, {   // ← fixed
+    await fetch("https://edu-assist-backend-6q9z.onrender.com/register-token", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

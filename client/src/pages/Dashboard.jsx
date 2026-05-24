@@ -329,7 +329,7 @@ export default function Dashboard() {
             <button className="qa-btn outline-green" style={{borderColor:'#059669',color:'#059669'}}
               onClick={async()=>{
                 try{
-                  const res = await fetch(`${process.env.REACT_APP_API_URL}/notify/test`, {
+                  const res = await fetch('https://edu-assist-backend-6q9z.onrender.com/notify/test', {
                     method:'POST',
                     headers:{Authorization:`Bearer ${user.token}`}
                   });
