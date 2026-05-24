@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import GPACalculator from './GPACalculator';
@@ -36,10 +36,10 @@ function Dashboard() {
     if (!token) { navigate('/'); return; }
     const load = async () => {
       try {
-        const r = await axios.get('http://127.0.0.1:8000/notifications');
+        const r = await axios.get('https://edu-assist-backend-6q9z.onrender.com/notifications');
         setAnnouncements(Array.isArray(r.data) ? r.data : []);
         try {
-          const p = await axios.get('http://127.0.0.1:8000/pins', { headers: { Authorization: `Bearer ${token}` } });
+          const p = await axios.get('https://edu-assist-backend-6q9z.onrender.com/pins', { headers: { Authorization: `Bearer ${token}` } });
           setPinnedIds(p.data);
         } catch {}
       } catch { setAnnouncements([]); }
@@ -53,8 +53,8 @@ function Dashboard() {
     setPinnedIds(was ? pinnedIds.filter(p => p !== id) : [...pinnedIds, id]);
     try {
       const cfg = { headers: { Authorization: `Bearer ${token}` } };
-      was ? await axios.delete(`http://127.0.0.1:8000/pin/${id}`, cfg)
-          : await axios.post(`http://127.0.0.1:8000/pin/${id}`, {}, cfg);
+      was ? await axios.delete(`https://edu-assist-backend-6q9z.onrender.com/pin/${id}`, cfg)
+          : await axios.post(`https://edu-assist-backend-6q9z.onrender.com/pin/${id}`, {}, cfg);
     } catch {
       setPinnedIds(was ? [...pinnedIds, id] : pinnedIds.filter(p => p !== id));
     }
@@ -227,7 +227,7 @@ function Dashboard() {
                     {item.files.length > 0 && (
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem' }}>
                         {item.files.map((f, i) => (
-                          <a key={i} href={`http://127.0.0.1:8000/download?file_id=${encodeURIComponent(f.id)}`} target="_blank" rel="noopener noreferrer" className="download-btn" style={{ width: 'auto' }}>
+                          <a key={i} href={`https://edu-assist-backend-6q9z.onrender.com/download?file_id=${encodeURIComponent(f.id)}`} target="_blank" rel="noopener noreferrer" className="download-btn" style={{ width: 'auto' }}>
                             <i className="fas fa-download" /> {f.name}
                           </a>
                         ))}
@@ -266,3 +266,4 @@ function App() {
 }
 
 export default App;
+

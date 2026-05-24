@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import './App.css';
@@ -19,7 +19,7 @@ function Login() {
     formData.append('password', password);
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/login', formData, {
+      const response = await axios.post('https://edu-assist-backend-6q9z.onrender.com/login', formData, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
 

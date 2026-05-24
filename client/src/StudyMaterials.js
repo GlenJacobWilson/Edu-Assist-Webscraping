@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
 
-const API = 'http://127.0.0.1:8000';
+const API = 'https://edu-assist-backend-6q9z.onrender.com';
 
 const SEMS  = ['S1','S2','S3','S4','S5','S6','S7','S8'];
 const DEPTS = ['CSE','ECE','EEE','MECH','CIVIL','IT'];
@@ -159,3 +159,4 @@ function StudyMaterials() {
 }
 
 export default StudyMaterials;
+

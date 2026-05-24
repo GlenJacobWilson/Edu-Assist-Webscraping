@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
 
-const API = 'http://127.0.0.1:8000';
+const API = 'https://edu-assist-backend-6q9z.onrender.com';
 
 function Discussion() {
   const [questions, setQuestions]       = useState([]);
@@ -215,3 +215,4 @@ function Discussion() {
 }
 
 export default Discussion;
+

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
@@ -22,7 +22,7 @@ export default function Login() {
       try {
         // We need the token set first; login() sets it
         const tempToken = data.access_token;
-        const meRes = await fetch('http://127.0.0.1:8000/me', {
+        const meRes = await fetch('https://edu-assist-backend-6q9z.onrender.com/me', {
           headers: { Authorization: `Bearer ${tempToken}` }
         });
         if (meRes.ok) meData = await meRes.json();
@@ -79,3 +79,4 @@ export default function Login() {
     </div>
   );
 }
+

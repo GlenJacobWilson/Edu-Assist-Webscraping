@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import GPACalculator from './GPACalculator';
@@ -63,7 +63,7 @@ function Dashboard() {
     const fetchData = async () => {
       try {
         // 1. Fetch KTU Data
-        const ktuRes = await axios.get('http://127.0.0.1:8000/notifications');
+        const ktuRes = await axios.get('https://edu-assist-backend-6q9z.onrender.com/notifications');
         
         // --- SAFETY CHECK START ---
         if (Array.isArray(ktuRes.data)) {
@@ -76,7 +76,7 @@ function Dashboard() {
         
         // 2. Fetch My Pinned IDs
         try {
-          const pinRes = await axios.get('http://127.0.0.1:8000/pins', {
+          const pinRes = await axios.get('https://edu-assist-backend-6q9z.onrender.com/pins', {
             headers: { Authorization: `Bearer ${token}` }
           });
           setPinnedIds(pinRes.data);
@@ -110,9 +110,9 @@ function Dashboard() {
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
       if (isPinned) {
-        await axios.delete(`http://127.0.0.1:8000/pin/${id}`, config);
+        await axios.delete(`https://edu-assist-backend-6q9z.onrender.com/pin/${id}`, config);
       } else {
-        await axios.post(`http://127.0.0.1:8000/pin/${id}`, {}, config);
+        await axios.post(`https://edu-assist-backend-6q9z.onrender.com/pin/${id}`, {}, config);
       }
     } catch (err) {
       console.error("Pinning failed:", err);
@@ -277,7 +277,7 @@ function Dashboard() {
                       {item.files.map((file, index) => (
                         <a 
                           key={index}
-                          href={`http://127.0.0.1:8000/download?file_id=${encodeURIComponent(file.id)}`}
+                          href={`https://edu-assist-backend-6q9z.onrender.com/download?file_id=${encodeURIComponent(file.id)}`}
                           target="_blank" 
                           rel="noopener noreferrer"
                           className="download-btn"

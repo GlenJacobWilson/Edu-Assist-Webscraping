@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import './App.css';
@@ -15,7 +15,7 @@ function Register() {
     e.preventDefault();
     setError(''); setLoading(true);
     try {
-      await axios.post('http://127.0.0.1:8000/register', form);
+      await axios.post('https://edu-assist-backend-6q9z.onrender.com/register', form);
       navigate('/');
     } catch (err) {
       setError(err.response?.data?.detail || 'Registration failed. Try again.');
@@ -80,3 +80,4 @@ function Register() {
 }
 
 export default Register;
+

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import GPACalculator from './GPACalculator';
@@ -81,10 +81,10 @@ function Dashboard() {
 
     const fetchData = async () => {
       try {
-        const ktuRes = await axios.get('http://127.0.0.1:8000/notifications');
+        const ktuRes = await axios.get('https://edu-assist-backend-6q9z.onrender.com/notifications');
         setAnnouncements(Array.isArray(ktuRes.data) ? ktuRes.data : []);
         try {
-          const pinRes = await axios.get('http://127.0.0.1:8000/pins', {
+          const pinRes = await axios.get('https://edu-assist-backend-6q9z.onrender.com/pins', {
             headers: { Authorization: `Bearer ${token}` }
           });
           setPinnedIds(pinRes.data);
@@ -103,8 +103,8 @@ function Dashboard() {
     setPinnedIds(isPinned ? pinnedIds.filter(p => p !== id) : [...pinnedIds, id]);
     try {
       const cfg = { headers: { Authorization: `Bearer ${token}` } };
-      isPinned ? await axios.delete(`http://127.0.0.1:8000/pin/${id}`, cfg)
-                : await axios.post(`http://127.0.0.1:8000/pin/${id}`, {}, cfg);
+      isPinned ? await axios.delete(`https://edu-assist-backend-6q9z.onrender.com/pin/${id}`, cfg)
+                : await axios.post(`https://edu-assist-backend-6q9z.onrender.com/pin/${id}`, {}, cfg);
     } catch {
       setPinnedIds(isPinned ? [...pinnedIds, id] : pinnedIds.filter(p => p !== id));
     }
@@ -258,7 +258,7 @@ function Dashboard() {
                       {item.files.map((file, i) => (
                         <a
                           key={i}
-                          href={`http://127.0.0.1:8000/download?file_id=${encodeURIComponent(file.id)}`}
+                          href={`https://edu-assist-backend-6q9z.onrender.com/download?file_id=${encodeURIComponent(file.id)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="download-btn"
@@ -300,3 +300,4 @@ function App() {
 }
 
 export default App;
+

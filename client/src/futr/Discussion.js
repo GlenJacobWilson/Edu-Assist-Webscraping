@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
@@ -17,7 +17,7 @@ function Discussion() {
 
   const fetchForum = async () => {
     try {
-      const res = await axios.get('http://127.0.0.1:8000/forum');
+      const res = await axios.get('https://edu-assist-backend-6q9z.onrender.com/forum');
       setQuestions(res.data);
     } catch (err) {
       console.error("Failed to load forum", err);
@@ -33,7 +33,7 @@ function Discussion() {
     if (!newTitle.trim() || !newContent.trim()) return;
     setPosting(true);
     try {
-      await axios.post('http://127.0.0.1:8000/forum/question',
+      await axios.post('https://edu-assist-backend-6q9z.onrender.com/forum/question',
         { title: newTitle, content: newContent },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -46,7 +46,7 @@ function Discussion() {
   const handlePostAnswer = async (qId) => {
     if (!newAnswer.trim()) return;
     try {
-      await axios.post(`http://127.0.0.1:8000/forum/question/${qId}/answer`,
+      await axios.post(`https://edu-assist-backend-6q9z.onrender.com/forum/question/${qId}/answer`,
         { content: newAnswer },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -56,7 +56,7 @@ function Discussion() {
 
   const handleVote = async (qId) => {
     try {
-      await axios.post(`http://127.0.0.1:8000/forum/question/${qId}/vote`, {},
+      await axios.post(`https://edu-assist-backend-6q9z.onrender.com/forum/question/${qId}/vote`, {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
       fetchForum();
@@ -66,7 +66,7 @@ function Discussion() {
   const handleDelete = async (qId) => {
     if (!window.confirm("Delete this question and all its answers?")) return;
     try {
-      await axios.delete(`http://127.0.0.1:8000/forum/question/${qId}`, {
+      await axios.delete(`https://edu-assist-backend-6q9z.onrender.com/forum/question/${qId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchForum();
@@ -262,3 +262,4 @@ function Discussion() {
 }
 
 export default Discussion;
+
